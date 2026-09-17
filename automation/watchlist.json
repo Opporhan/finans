@@ -1,0 +1,110 @@
+[
+  {
+    "symbol": "AAPL",
+    "name": "Apple",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/AAPL.png",
+    "industry": "Teknoloji"
+  },
+  {
+    "symbol": "MSFT",
+    "name": "Microsoft",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/MSFT.png",
+    "industry": "Teknoloji"
+  },
+  {
+    "symbol": "GOOGL",
+    "name": "Google",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/GOOG.png",
+    "industry": "Medya"
+  },
+  {
+    "symbol": "AMZN",
+    "name": "Amazon",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/AMZN.png",
+    "industry": "Perakende"
+  },
+  {
+    "symbol": "META",
+    "name": "Meta",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/FB.png",
+    "industry": "Medya"
+  },
+  {
+    "symbol": "NVDA",
+    "name": "Nvidia",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/942959144056.png",
+    "industry": "Yarı İletkenler"
+  },
+  {
+    "symbol": "TSLA",
+    "name": "Tesla",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/TSLA.png",
+    "industry": "Otomobil"
+  },
+  {
+    "symbol": "AMD",
+    "name": "AMD",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/AMD.png",
+    "industry": "Yarı İletkenler"
+  },
+  {
+    "symbol": "AVGO",
+    "name": "Broadcom",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/AVGO.png",
+    "industry": "Yarı İletkenler"
+  },
+  {
+    "symbol": "ORCL",
+    "name": "Oracle",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/ORCL.png",
+    "industry": "Teknoloji"
+  },
+  {
+    "symbol": "CRM",
+    "name": "Salesforce",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/CRM.png",
+    "industry": "Teknoloji"
+  },
+  {
+    "symbol": "ADBE",
+    "name": "Adobe",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/ADBE.png",
+    "industry": "Teknoloji"
+  },
+  {
+    "symbol": "NFLX",
+    "name": "Netflix",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/NFLX.png",
+    "industry": "Medya"
+  },
+  {
+    "symbol": "INTC",
+    "name": "Intel",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/INTC.png",
+    "industry": "Yarı İletkenler"
+  },
+  {
+    "symbol": "QCOM",
+    "name": "Qualcomm",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/QCOM.png",
+    "industry": "Yarı İletkenler"
+  },
+  {
+    "symbol": "TSM",
+    "name": "TSMC",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/2330.TW.png",
+    "industry": "Yarı İletkenler"
+  },
+  {
+    "symbol": "ASML",
+    "name": "ASML",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/ASML.AS.png",
+    "industry": "Yarı İletkenler"
+  },
+  {
+    "symbol": "SHOP",
+    "name": "Shopify",
+    "logo": "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/SHOP.png",
+    "industry": "Teknoloji"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "outputDirectory": "miniapp/public",
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 60,
+      "includeFiles": "{automation/**,assets/js/**}"
+    },
+    "api/cron/*.js": {
+      "maxDuration": 60,
+      "includeFiles": "{automation/**,assets/js/**}"
+    }
+  },
+  "crons": [
+    { "path": "/api/cron/refresh-fundamentals", "schedule": "0 3 * * *" }
+  ]
+}

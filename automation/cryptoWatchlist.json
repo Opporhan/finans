@@ -1,0 +1,12 @@
+[
+  { "id": "bitcoin", "symbol": "BTC", "name": "Bitcoin", "category": "Değer Saklama" },
+  { "id": "ethereum", "symbol": "ETH", "name": "Ethereum", "category": "Akıllı Kontrat Platformu" },
+  { "id": "binancecoin", "symbol": "BNB", "name": "BNB", "category": "Borsa Token'ı" },
+  { "id": "ripple", "symbol": "XRP", "name": "XRP", "category": "Ödeme" },
+  { "id": "solana", "symbol": "SOL", "name": "Solana", "category": "Akıllı Kontrat Platformu" },
+  { "id": "cardano", "symbol": "ADA", "name": "Cardano", "category": "Akıllı Kontrat Platformu" },
+  { "id": "dogecoin", "symbol": "DOGE", "name": "Dogecoin", "category": "Meme Coin" },
+  { "id": "avalanche-2", "symbol": "AVAX", "name": "Avalanche", "category": "Akıllı Kontrat Platformu" },
+  { "id": "chainlink", "symbol": "LINK", "name": "Chainlink", "category": "Oracle / Altyapı" },
+  { "id": "polkadot", "symbol": "DOT", "name": "Polkadot", "category": "Birlikte Çalışabilirlik" }
+]

@@ -1,0 +1,24 @@
+# Hassas bilgiler — deployment'a ASLA girmemeli (Vercel env var olarak ayrıca eklendi)
+.env
+.env.*
+*.key
+*.pem
+secrets.*
+config.local.*
+
+# Sistem / editör
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Otomasyon çalışma zamanı verisi / logları (kaynak değil, kişisel/lokal)
+automation/*.log
+automation/state.json
+automation/bot_offset.json
+automation/*.plist
+automation/*.local.json
+
+# Yerel geliştirme / node
+node_modules/
+miniapp/.vercel/

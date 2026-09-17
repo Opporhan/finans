@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Yatırım Danışmanı</title>
+<script>
+  // Kullanıcının elle seçtiği tema varsa (bkz. assets/theme.js), stil
+  // yüklenmeden ÖNCE uygula — yanlış temanın bir anlığına görünmesini
+  // (flash) önler. Seçim yoksa otomatik algılama (prefers-color-scheme /
+  // Telegram colorScheme) devrede kalır.
+  try {
+    const saved = localStorage.getItem("theme");
+    if (saved === "dark" || saved === "light") document.documentElement.dataset.theme = saved;
+  } catch { /* localStorage kapalıysa sessiz geç */ }
+</script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span class="brand-name">Yatırım Danışmanı</span>
+    <button id="fxButton" class="icon-btn" aria-label="Döviz ve altın" title="Döviz ve altın">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2.2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></svg>
+    </button>
+    <button id="themeToggle" class="icon-btn theme-toggle" aria-label="Temayı değiştir" title="Temayı değiştir">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg>
+    </button>
+  </div>
+  <header class="tabbar">
+    <button class="tab active" data-tab="durum">Hisseler</button>
+    <button class="tab" data-tab="haberler">Haberler</button>
+    <button class="tab" data-tab="kripto">Kripto</button>
+  </header>
+
+  <section id="tab-durum" class="tab-panel active">
+    <div class="chart-tabs durum-subtabs">
+      <button class="chart-tab active" data-subtab="liste">Durum</button>
+      <button class="chart-tab" data-subtab="yatirim">Hisse Yatırımlarım</button>
+    </div>
+
+    <div id="durum-sub-liste" class="subtab-panel active">
+      <div class="panel-head">
+        <span id="durumUpdated" class="hint"></span>
+        <button id="refreshDurum" class="btn-ghost">🔄 Yenile</button>
+      </div>
+      <div id="durumList" class="list">
+        <div class="empty">Yükleniyor…</div>
+      </div>
+    </div>
+
+    <div id="durum-sub-yatirim" class="subtab-panel">
+      <div id="butceForm" class="card">
+        <label class="field">
+          <span>Aylık yatırım tutarı (TL)</span>
+          <input id="budgetInput" type="text" inputmode="decimal" placeholder="ör. 5000 ya da 5.000" />
+        </label>
+        <label class="field">
+          <span>Süre</span>
+          <div class="duration-field">
+            <input id="durationInput" type="number" inputmode="decimal" placeholder="ör. 6" min="1" />
+            <select id="durationUnit">
+              <option value="ay">Ay</option>
+              <option value="yil" selected>Yıl</option>
+            </select>
+          </div>
+        </label>
+        <button id="calcBtn" class="btn-primary">Hesapla</button>
+      </div>
+
+      <div id="butceResult"></div>
+    </div>
+  </section>
+
+  <section id="tab-haberler" class="tab-panel">
+    <div class="panel-head">
+      <span id="haberlerUpdated" class="hint"></span>
+      <button id="refreshHaberler" class="btn-ghost">🔄 Yenile</button>
+    </div>
+    <div class="chart-tabs news-filter-tabs">
+      <button class="chart-tab active" data-filter="all">Hepsi</button>
+      <button class="chart-tab" data-filter="stock">Hisse Senedi</button>
+      <button class="chart-tab" data-filter="crypto">Kripto</button>
+    </div>
+    <div id="haberlerList" class="list">
+      <div class="empty">Yükleniyor…</div>
+    </div>
+  </section>
+
+  <section id="tab-kripto" class="tab-panel">
+    <div class="chart-tabs kripto-subtabs">
+      <button class="chart-tab active" data-subtab="liste">Durum</button>
+      <button class="chart-tab" data-subtab="yatirim">Kripto Yatırımlarım</button>
+    </div>
+
+    <div id="kripto-sub-liste" class="subtab-panel active">
+      <div class="panel-head">
+        <span id="kriptoUpdated" class="hint"></span>
+        <button id="refreshKripto" class="btn-ghost">🔄 Yenile</button>
+      </div>
+      <div id="kriptoList" class="list">
+        <div class="empty">Yükleniyor…</div>
+      </div>
+    </div>
+
+    <div id="kripto-sub-yatirim" class="subtab-panel">
+      <div id="kriptoBudgetForm" class="card">
+        <label class="field">
+          <span>Aylık yatırım tutarı (TL)</span>
+          <input id="kriptoBudgetInput" type="text" inputmode="decimal" placeholder="ör. 5000 ya da 5.000" />
+        </label>
+        <label class="field">
+          <span>Süre</span>
+          <div class="duration-field">
+            <input id="kriptoDurationInput" type="number" inputmode="decimal" placeholder="ör. 6" min="1" />
+            <select id="kriptoDurationUnit">
+              <option value="ay">Ay</option>
+              <option value="yil" selected>Yıl</option>
+            </select>
+          </div>
+        </label>
+        <button id="kriptoCalcBtn" class="btn-primary">Hesapla</button>
+      </div>
+
+      <div id="kriptoBudgetResult"></div>
+    </div>
+  </section>
+</div>
+
+<div id="newsModal" class="modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" aria-label="Kapat">×</button>
+    <div class="modal-head">
+      <span id="newsModalLogo"></span>
+      <div>
+        <div id="newsModalSymbol" class="news-symbol"></div>
+        <div id="newsModalMeta" class="hint"></div>
+      </div>
+    </div>
+    <h3 id="newsModalHeadline" class="modal-headline"></h3>
+    <p id="newsModalSummary" class="modal-summary"></p>
+    <p id="newsModalTruncatedNote" class="hint modal-truncated-note">ℹ️ Bu haberin tam metni sadece kaynağında mevcut, özet burada kısaltılmıştır.</p>
+    <a id="newsModalSource" class="btn-ghost" target="_blank" rel="noopener noreferrer">Kaynağı görüntüle ↗</a>
+  </div>
+</div>
+
+<div id="fxModal" class="modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" aria-label="Kapat">×</button>
+    <h3 class="modal-headline">Döviz &amp; Değerli Maden</h3>
+    <p id="fxUpdated" class="hint fx-updated"></p>
+
+    <div id="fxBody">
+      <div class="empty">Yükleniyor…</div>
+    </div>
+  </div>
+</div>
+
+<div id="infoModal" class="modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" aria-label="Kapat">×</button>
+    <h3 id="infoModalTitle" class="modal-headline"></h3>
+    <div id="infoModalBody" class="modal-summary"></div>
+  </div>
+</div>
+
+<div id="chartModal" class="modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" aria-label="Kapat">×</button>
+    <div class="modal-head">
+      <span id="chartModalLogo"></span>
+      <div id="chartModalSymbol" class="news-symbol"></div>
+    </div>
+    <div id="chartPeriodStat" class="chart-period-stat"></div>
+    <div class="chart-tabs">
+      <button class="chart-tab" data-months="3">3 Ay</button>
+      <button class="chart-tab" data-months="6">6 Ay</button>
+      <button class="chart-tab" data-months="ytd">YBB</button>
+      <button class="chart-tab active" data-months="12">1 Yıl</button>
+    </div>
+    <div id="chartSvgWrap" class="chart-svg-wrap"></div>
+    <p class="hint chart-note">ℹ️ 3 Ay / 6 Ay / YBB / 1 Yıl sekmeleri, gerçek dönem verilerinden (1ay/3ay/YBB/6ay/1yıl) oluşan noktaları düz çizgiyle birleştirir — günlük fiyat verisi değildir.</p>
+  </div>
+</div>
+
+<div id="cryptoChartModal" class="modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" aria-label="Kapat">×</button>
+    <div class="modal-head">
+      <span id="cryptoChartModalLogo"></span>
+      <div id="cryptoChartModalSymbol" class="news-symbol"></div>
+    </div>
+    <div id="cryptoChartPeriodStat" class="chart-period-stat"></div>
+    <div class="chart-tabs">
+      <button class="chart-tab" data-days="7">7G</button>
+      <button class="chart-tab active" data-days="30">1 Ay</button>
+      <button class="chart-tab" data-days="90">3 Ay</button>
+      <button class="chart-tab" data-days="365">1 Yıl</button>
+    </div>
+    <div id="cryptoChartSvgWrap" class="chart-svg-wrap"></div>
+    <p class="hint chart-note">ℹ️ CoinGecko'nun gerçek günlük/saatlik fiyat serisinden çizilmiştir — hisse grafiğinden farklı olarak burada onlarca/yüzlerce gerçek nokta var, bu yüzden çizgi daha pürüzsüz görünür.</p>
+  </div>
+</div>
+
+<script src="assets/telegram.js"></script>
+<script src="assets/theme.js"></script>
+<script src="assets/format.js"></script>
+<script src="assets/api.js"></script>
+<script src="assets/fx.js"></script>
+<script src="assets/info.js"></script>
+<script src="assets/chart.js"></script>
+<script src="assets/cryptoChart.js"></script>
+<script src="assets/dashboard.js"></script>
+<script src="assets/crypto.js"></script>
+<script src="assets/news.js"></script>
+<script src="assets/budget.js"></script>
+<script src="assets/cryptoBudget.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

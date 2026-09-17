@@ -1,0 +1,53 @@
+/* ============================================================
+   miniapp/api/crypto-portfolio.js — POST: aylık yatırım tutarı ->
+   kripto dağıtımı. api/portfolio.js'in kripto eşdeğeri.
+   Body: { budgetTRY: number }
+   ============================================================ */
+const CFG = require("../automation/config.js");
+const { authorize } = require("./_lib/telegramAuth.js");
+const { analyzeCryptoWatchlist } = require("../automation/cryptoMarketData.js");
+const cryptoAdvisor = require("../automation/cryptoAdvisor.js");
+const fx = require("../automation/fx.js");
+const { readJsonBody, fmtTRY } = require("./_lib/http.js");
+
+module.exports = async (req, res) => {
+  const auth = authorize(req, CFG);
+  if (!auth.ok) {
+    res.status(auth.status).json({ ok: false });
+    return;
+  }
+  if (req.method !== "POST") {
+    res.status(405).json({ ok: false, error: "POST gerekli" });
+    return;
+  }
+
+  let body;
+  try {
+    body = await readJsonBody(req);
+  } catch (e) {
+    res.status(400).json({ ok: false, error: "Geçersiz JSON gövdesi" });
+    return;
+  }
+
+  const budgetTRY = Number(body.budgetTRY);
+  if (!Number.isFinite(budgetTRY) || budgetTRY <= 0) {
+    res.status(400).json({ ok: false, error: "Geçersiz tutar" });
+    return;
+  }
+  try {
+    const rate = await fx.getUsdTryRate();
+    const budgetUSD = Math.round((budgetTRY / rate) * 100) / 100;
+    const fxNote = `Girilen aylık yatırım: ${fmtTRY(budgetTRY)} (kur: 1 USD ≈ ${rate.toFixed(2)} TL)`;
+
+    const { watchlist, coins } = await analyzeCryptoWatchlist();
+    const candidates = coins.filter((c) => c.momentumKey === "up" || c.momentumKey === "strongUp");
+    const rec = cryptoAdvisor.buildAllocation({ candidates, budget: budgetUSD });
+    rec.fxRate = rate;
+    rec.fxNote = fxNote;
+    rec.totalCoins = watchlist.length;
+
+    res.status(200).json({ ok: true, rec });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
+  }
+};
