@@ -400,3 +400,67 @@ Kalan 9 bulgunun TÜMÜ düzeltildi ve fonksiyonel olarak test edildi:
   `api/_lib/http.js` (yeni), `api/portfolio.js`, `api/crypto-portfolio.js`,
   `api/horizon.js`, `api/crypto-horizon.js`, `automation/config.js`.
 - Sırada: commit + push (artık düzelmiş pipeline'ı tekrar test edecek).
+
+---
+
+## 2026-09-18 — E-posta temizliği, repo public, LinkedIn paylaşımı
+
+Kullanıcı GitHub'da commit diff'inde ve `PROGRESS.md` içeriğinde gerçek
+Gmail adresinin göründüğünü fark etti. Plan modunda ele alındı:
+
+- `PROGRESS.md`'deki 4 düz-metin e-posta geçişi (gerçek adres + eski
+  hatalı hostname placeholder) genel ifadelerle değiştirildi.
+- Commit yazarlığı GitHub'ın **noreply** e-postasına geçirildi
+  (`169698305+Opporhan@users.noreply.github.com`, hem yerel hem global
+  git config) — commit'ler hesaba bağlı görünmeye devam ediyor ama gerçek
+  e-posta hiç ifşa olmuyor.
+- 3 commit'lik geçmiş yine `git checkout --orphan` ile TEK, temiz bir
+  commit'e sıkıştırılıp force-push edildi (kullanıcı onayıyla). `git grep`
+  ile hem içerikte hem `gh api` ile GitHub'ın kendi görünümünde sıfır
+  eşleşme doğrulandı. Vercel deploy'unun noreply e-postayla da sorunsuz
+  çalıştığı (Ready, tüm alias'lar güncellendi) teyit edildi.
+- Kullanıcı onayıyla **repo public yapıldı**: https://github.com/Opporhan/finans
+  (son bir `git grep` ile sır/e-posta taraması yapıldıktan sonra).
+- LinkedIn paylaşımı: taslak metin birlikte birkaç turda düzeltildi
+  (AL/SAT dilinden tamamen kaçınıldı, emoji + samimi ton, gerçek zaman
+  çizelgesi "2-3 gün"). Tarayıcı otomasyonuyla (kullanıcının kendi LinkedIn
+  oturumu) gönderi kutusuna metin yazıldı — kullanıcı video eklemek istedi
+  ama dosya (154MB) otomasyon aracının 10MB tek seferlik yükleme sınırını
+  aştığı için o adımı kullanıcı kendisi yaptı. İlk paylaşım denemesinde
+  LinkedIn genel bir hata verdi (kullanıcı kapatıp kendisi tekrar
+  deneyecek) — kesin neden netleşmedi, video boyutu/format kaynaklı olması
+  muhtemel.
+- Değişen dosyalar: `PROGRESS.md` (redaksiyon).
+
+---
+
+## 2026-09-18 (devam) — İlk otomatik test paketi eklendi
+
+Kullanıcı "ilk projem, tarafsız bir gözle nasıl oldu?" diye sordu — dürüst
+bir değerlendirmede otomatik test eksikliği ana eleştiri olarak öne çıktı
+(bugünkü kapsamlı incelemede bulunan 9 gerçek bug, test olmadan aylarca
+fark edilmeden kalabilirdi). Kullanıcı "atlamayalım, yaz" dedi.
+
+- Yeni bağımlılık EKLENMEDİ — Node'un yerleşik `node:test` + `node:assert`
+  modülü kullanıldı (proje zaten Node 24.x hedefliyor, Node 18+'ta yerleşik).
+- 3 test dosyası, sadece dış servise (ağ/API) bağımlı OLMAYAN saf
+  fonksiyonları kapsıyor:
+  - `tests/format.test.js` — `Fmt.try/pct/usd/cryptoPrice/tryUsd/
+    verdictBadgeClass` (tarayıcı dosyası `window.Fmt` kullanıyor, testte
+    minimal bir `global.window` stub'ıyla require ediliyor, dosyanın
+    kendisi değiştirilmedi).
+  - `tests/articleExtract.test.js` — `sanitizeSummary`, `looksTruncated`
+    (bugün canlıda bulunan HTML-sızıntısı ve kelime-ortası-kırpılma
+    bug'larının regresyon testleri dahil).
+  - `tests/cryptoAnalysis.test.js` — `momentumScore`, `riskLevelFor`,
+    `volatilityFromSparkline` (uygulamanın çekirdek puanlama mantığı).
+- `package.json`'a `"test": "node --test"` script'i eklendi (ilk denemede
+  `node --test tests/` bu Node sürümünde [v26.7.0] MODULE_NOT_FOUND
+  hatası verdi — bare argümansız `node --test` varsayılan otomatik
+  keşfin doğru çalıştığı görüldü, ona geçildi).
+- `npm test` → **20/20 test geçti**, node_modules'ten sızan beklenmedik
+  hiçbir test yok (dosya başına test sayısı elle doğrulandı: 7+7+6=20).
+- Değişen/yeni dosyalar: `tests/format.test.js` (yeni),
+  `tests/articleExtract.test.js` (yeni), `tests/cryptoAnalysis.test.js`
+  (yeni), `package.json`.
+- Sırada: commit + push.
